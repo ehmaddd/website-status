@@ -1,5 +1,6 @@
 /* App.css */
 
+/* Body and overall styling */
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f9;
@@ -9,7 +10,7 @@ body {
 
 .app {
   text-align: center;
-  max-width: 600px;
+  max-width: 100%; /* Ensure max-width takes full width of the screen */
   margin: 20px auto;
   padding: 20px;
   background-color: #fff;
@@ -38,33 +39,52 @@ h2 {
   cursor: not-allowed;
 }
 
-.status-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
+/* Grid layout for status cards - make them responsive */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));  /* Cards will fill space, and each card will be at least 220px wide */
+  gap: 15px;
+  padding: 0 10px;
+  margin-bottom: 20px;
+  width: 100%;  /* Ensure grid takes full width */
 }
 
-.status-table th, .status-table td {
-  padding: 10px;
-  border: 1px solid #ddd;
+/* Styling for individual status cards */
+.status-card {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
   text-align: left;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;  /* Ensure card takes full width available in the grid */
+  overflow-wrap: break-word; /* Prevent overflow */
+  word-wrap: break-word;    /* Prevent overflow */
+  white-space: normal;      /* Allow wrapping of text */
+  box-sizing: border-box;   /* Ensures padding does not affect width */
 }
 
-.status-table th {
-  background-color: #007bff;
-  color: white;
+.status-card h4 {
+  font-size: 14px;
+  margin: 0;
+  color: #333;
 }
 
-.status-table .status-up {
-  background-color: #d4edda;
-  color: #155724;
+.status-card p {
+  margin: 5px 0;
+  font-size: 12px;
 }
 
-.status-table .status-down {
-  background-color: #f8d7da;
-  color: #721c24;
+.status-up {
+  border-left: 4px solid #28a745;
+  padding-left: 10px;
 }
 
+.status-down {
+  border-left: 4px solid #dc3545;
+  padding-left: 10px;
+}
+
+/* Summary section */
 .summary {
   margin-top: 20px;
   padding: 15px;

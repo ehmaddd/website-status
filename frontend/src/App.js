@@ -16,7 +16,6 @@ function App() {
       if (data.summary) {
         setUpCount(data.summary.upCount);
         setDownCount(data.summary.downCount);
-        setLoading(false);
       } else {
         setStatusData((prevData) => [...prevData, data]);
       }
@@ -46,29 +45,19 @@ function App() {
         {loading ? "Checking..." : "Check Status"}
       </button>
 
-      <table className="status-table">
-        <thead>
-          <tr>
-            <th>Website URL</th>
-            <th>Status</th>
-            <th>HTTP Code</th>
-          </tr>
-        </thead>
-        <tbody>
-          {statusData.map((site, index) => (
-            <tr key={index} className={site.statusText === "Up" ? "status-up" : "status-down"}>
-              <td>{site.url}</td>
-              <td>{site.statusText}</td>
-              <td>{site.status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="status-grid">
+        {statusData.map((site, index) => (
+          <div key={index} className={`status-card ${site.statusText === 'Up' ? 'status-up' : 'status-down'}`}>
+            <h4>{site.url}</h4>
+            <p>Status: {site.status} ({site.statusText})</p>
+          </div>
+        ))}
+      </div>
 
       <div className="summary">
-        <h3>Summary</h3>
-        <p>UP websites: <span className="up-count">{upCount}</span></p>
-        <p>DOWN websites: <span className="down-count">{downCount}</span></p>
+        <h3>Summary:</h3>
+        <p className="up-count">UP websites: {upCount}</p>
+        <p className="down-count">DOWN websites: {downCount}</p>
       </div>
     </div>
   );
