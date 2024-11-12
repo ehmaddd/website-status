@@ -7,7 +7,7 @@ function App() {
   const [upCount, setUpCount] = useState(0);
   const [downCount, setDownCount] = useState(0);
 
-  useEffect(() => {
+  const check = () => {
     const eventSource = new EventSource('http://localhost:5000/check-websites');
     
     eventSource.onmessage = (event) => {
@@ -38,7 +38,7 @@ function App() {
     return () => {
       eventSource.close();
     };
-  }, []);
+  };
 
   const checkWebsites = () => {
     setStatusData([]);
@@ -48,13 +48,14 @@ function App() {
   };
 
   return (
-    <div className="app">
+    <div className="main">
       <header>
         <h2>Website Status Checker</h2>
         <div className="summary">
           <div className="left">
             <p className="up-count">UP websites: {upCount}</p>
           </div>
+          <button onClick={check}>Check</button>
           <div className="right">
             <p className="down-count">DOWN websites: {downCount}</p>
           </div>
@@ -63,9 +64,14 @@ function App() {
 
       <div className="status-grid">
         {statusData.map((site, index) => (
-          <div key={index} className={`status-card ${site.statusText === 'Up' ? 'status-up' : 'status-down'}`}>
+          <div 
+            key={index} 
+            className={`status-card ${site.statusText === 'Up' ? 'status-up' : 'status-down'}`}
+          >
             <h4>{site.url}</h4>
-            <p>Status: {site.status} ({site.statusText})</p>
+            <p className={`status ${site.status === 200 ? 'status-up' : 'status-down'}`}>
+              Status: {site.status} ({site.statusText})
+            </p>
           </div>
         ))}
       </div>
