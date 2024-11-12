@@ -18,7 +18,7 @@ header {
 }
 
 h2 {
-  color: white;
+  color: black;
   margin-bottom: 20px;
   text-align: center;
   border: 0;
@@ -82,6 +82,10 @@ h2 {
   word-wrap: break-word;    /* Prevent overflow */
   white-space: normal;      /* Allow wrapping of text */
   box-sizing: border-box;   /* Ensures padding does not affect width */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0;
 }
 
 .status-card h4 {
@@ -139,4 +143,16 @@ h2 {
 .down-count {
   color: white; /* Ensure white text in the red section */
   font-weight: bold;
+}
+
+.site {
+  text-decoration: none;
+}
+
+.site-up {
+  color: green;
+}
+
+.site-down {
+  color: red;
 }
