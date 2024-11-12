@@ -7,7 +7,6 @@ body {
 
 header {
   top: 0;
-  z-index: 100;
   background-color: white;
   position: sticky;
 }
@@ -91,23 +90,30 @@ h2 {
 /* Summary section */
 .summary {
   display: flex;
-  flex-direction: row;
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f0f0f0;
-  border-radius: 5px;
+  width: 100%;
 }
 
-.summary h3 {
-  color: #333;
+.left, .right {
+  flex: 1;
+  padding: 10px;
+  color: white; /* White text for general styling */
 }
 
+.left {
+  background-color: green;
+}
+
+.right {
+  background-color: red;
+}
+
+/* Specifically adjust up-count and down-count text color */
 .up-count {
-  color: #28a745;
+  color: white; /* Ensure white text in the green section */
   font-weight: bold;
 }
 
 .down-count {
-  color: #dc3545;
+  color: white; /* Ensure white text in the red section */
   font-weight: bold;
 }

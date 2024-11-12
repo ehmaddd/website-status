@@ -52,8 +52,12 @@ function App() {
       <header>
         <h2>Website Status Checker</h2>
         <div className="summary">
-          <p className="up-count">UP websites: {upCount}</p>
-          <p className="down-count">DOWN websites: {downCount}</p>
+          <div className="left">
+            <p className="up-count">UP websites: {upCount}</p>
+          </div>
+          <div className="right">
+            <p className="down-count">DOWN websites: {downCount}</p>
+          </div>
         </div>
       </header>
 
