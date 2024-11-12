@@ -1,11 +1,15 @@
-/* App.css */
-
-/* Body and overall styling */
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f9;
   margin: 0;
   padding: 0;
+}
+
+header {
+  top: 0;
+  z-index: 100;
+  background-color: white;
+  position: sticky;
 }
 
 .app {
@@ -86,6 +90,8 @@ h2 {
 
 /* Summary section */
 .summary {
+  display: flex;
+  flex-direction: row;
   margin-top: 20px;
   padding: 15px;
   background-color: #f0f0f0;

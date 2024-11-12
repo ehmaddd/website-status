@@ -14,10 +14,19 @@ function App() {
       const data = JSON.parse(event.data);
 
       if (data.summary) {
+        // When summary data is received, update the final counts
         setUpCount(data.summary.upCount);
         setDownCount(data.summary.downCount);
       } else {
+        // For each website, update the status data
         setStatusData((prevData) => [...prevData, data]);
+
+        // Update the counts continuously as websites are checked
+        if (data.statusText === 'Up') {
+          setUpCount((prevCount) => prevCount + 1);
+        } else if (data.statusText === 'Down') {
+          setDownCount((prevCount) => prevCount + 1);
+        }
       }
     };
 
@@ -40,10 +49,13 @@ function App() {
 
   return (
     <div className="app">
-      <h2>Website Status Checker</h2>
-      <button onClick={checkWebsites} disabled={loading} className="check-button">
-        {loading ? "Checking..." : "Check Status"}
-      </button>
+      <header>
+        <h2>Website Status Checker</h2>
+        <div className="summary">
+          <p className="up-count">UP websites: {upCount}</p>
+          <p className="down-count">DOWN websites: {downCount}</p>
+        </div>
+      </header>
 
       <div className="status-grid">
         {statusData.map((site, index) => (
@@ -52,12 +64,6 @@ function App() {
             <p>Status: {site.status} ({site.statusText})</p>
           </div>
         ))}
-      </div>
-
-      <div className="summary">
-        <h3>Summary:</h3>
-        <p className="up-count">UP websites: {upCount}</p>
-        <p className="down-count">DOWN websites: {downCount}</p>
       </div>
     </div>
   );
