@@ -1,77 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+// Use dynamic import for p-limit
+(async () => {
+  const { default: pLimit } = await import('p-limit');  // Dynamically import the ESM package
 
-function App() {
-  const [statusData, setStatusData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [upCount, setUpCount] = useState(0);
-  const [downCount, setDownCount] = useState(0);
+  const express = require('express');
+  const axios = require('axios');
+  const cors = require('cors');
 
-  useEffect(() => {
-    const eventSource = new EventSource('http://localhost:5000/check-websites');
-    
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+  const app = express();
+  app.use(cors()); // Allow cross-origin requests
 
-      if (data.summary) {
-        setUpCount(data.summary.upCount);
-        setDownCount(data.summary.downCount);
-        setLoading(false);
-      } else {
-        setStatusData((prevData) => [...prevData, data]);
+  // Define the limit of concurrent requests
+  const limit = pLimit(5);  // Adjust based on your system's capabilities (5 concurrent requests)
+
+  // Endpoint to check the status of multiple websites
+  app.get('/check-websites', async (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+
+    const websites = require('./websites');  // Assuming the websites are in a separate file
+
+    let upCount = 0;
+    let downCount = 0;
+
+    // Function to check each website
+    const checkWebsite = async (url) => {
+      try {
+        const response = await axios.get(url, { timeout: 5000 });  // 5 seconds timeout
+        upCount++;
+        res.write(`data: ${JSON.stringify({ url, status: response.status, statusText: 'Up' })}\n\n`);
+      } catch (error) {
+        downCount++;
+        res.write(`data: ${JSON.stringify({ url, status: error.response ? error.response.status : 0, statusText: 'Down' })}\n\n`);
       }
     };
 
-    eventSource.onerror = (error) => {
-      console.error('EventSource failed:', error);
-      eventSource.close();
-    };
+    // Process all websites with limited concurrency
+    const promises = websites.map((url) => limit(() => checkWebsite(url)));
+    await Promise.all(promises);  // Wait for all websites to be checked
 
-    return () => {
-      eventSource.close();
-    };
-  }, []);
+    // Send final summary after all websites have been checked
+    res.write(`data: ${JSON.stringify({ summary: { upCount, downCount } })}\n\n`);
+    res.end();
+  });
 
-  const checkWebsites = () => {
-    setStatusData([]);
-    setUpCount(0);
-    setDownCount(0);
-    setLoading(true);
-  };
-
-  return (
-    <div className="app">
-      <h2>Website Status Checker</h2>
-      <button onClick={checkWebsites} disabled={loading} className="check-button">
-        {loading ? "Checking..." : "Check Status"}
-      </button>
-
-      <table className="status-table">
-        <thead>
-          <tr>
-            <th>Website URL</th>
-            <th>Status</th>
-            <th>HTTP Code</th>
-          </tr>
-        </thead>
-        <tbody>
-          {statusData.map((site, index) => (
-            <tr key={index} className={site.statusText === "Up" ? "status-up" : "status-down"}>
-              <td>{site.url}</td>
-              <td>{site.statusText}</td>
-              <td>{site.status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="summary">
-        <h3>Summary</h3>
-        <p>UP websites: <span className="up-count">{upCount}</span></p>
-        <p>DOWN websites: <span className="down-count">{downCount}</span></p>
-      </div>
-    </div>
-  );
-}
-
-export default App;
+  const PORT = 5000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+})();

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './App.css';
 
 function App() {
   const [statusData, setStatusData] = useState([]);
@@ -15,6 +16,7 @@ function App() {
       if (data.summary) {
         setUpCount(data.summary.upCount);
         setDownCount(data.summary.downCount);
+        setLoading(false);
       } else {
         setStatusData((prevData) => [...prevData, data]);
       }
@@ -38,24 +40,35 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="app">
       <h2>Website Status Checker</h2>
-      <button onClick={checkWebsites} disabled={loading}>
+      <button onClick={checkWebsites} disabled={loading} className="check-button">
         {loading ? "Checking..." : "Check Status"}
       </button>
 
-      <ul>
-        {statusData.map((site, index) => (
-          <li key={index} style={{ color: site.statusText === "Up" ? "green" : "red" }}>
-            {site.url} - Status: {site.status} ({site.statusText})
-          </li>
-        ))}
-      </ul>
+      <table className="status-table">
+        <thead>
+          <tr>
+            <th>Website URL</th>
+            <th>Status</th>
+            <th>HTTP Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          {statusData.map((site, index) => (
+            <tr key={index} className={site.statusText === "Up" ? "status-up" : "status-down"}>
+              <td>{site.url}</td>
+              <td>{site.statusText}</td>
+              <td>{site.status}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-      <div>
-        <h3>Summary:</h3>
-        <p>UP websites: {upCount}</p>
-        <p>DOWN websites: {downCount}</p>
+      <div className="summary">
+        <h3>Summary</h3>
+        <p>UP websites: <span className="up-count">{upCount}</span></p>
+        <p>DOWN websites: <span className="down-count">{downCount}</span></p>
       </div>
     </div>
   );
