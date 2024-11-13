@@ -9,7 +9,7 @@ function App() {
 
   const check = () => {
     checkWebsites();
-    const eventSource = new EventSource(`/check-websites`);
+    const eventSource = new EventSource('http://localhost:5000/check-websites');
     
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -56,7 +56,7 @@ function App() {
           <div className="left">
             <p className="up-count">UP websites: {upCount}</p>
           </div>
-          <button onClick={check} className="check-button">Check</button>
+          <button onClick={check}>Check</button>
           <div className="right">
             <p className="down-count">DOWN websites: {downCount}</p>
           </div>
