@@ -1,19 +1,19 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: grey;
-  width: 98%;
-  text-align: center;
+  background-color: gainsboro;
 }
 
 header {
   top: 0;
-  background-color: grey;
+  background-color: gainsboro;
   margin: auto;
   text-align: center;
   position: sticky;
 }
 
 .main {
+  width: 98%;
+  text-align: center;
   margin: auto;
 }
 
@@ -65,7 +65,7 @@ h2 {
   gap: 15px;
   padding: 0 10px;
   margin-bottom: 20px;
-  width: 100%;  /* Ensure grid takes full width */
+  width: 99%;
 }
 
 /* Styling for individual status cards */
