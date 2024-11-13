@@ -5,9 +5,15 @@
   const express = require('express');
   const axios = require('axios');
   const cors = require('cors');
+  const path = require('path');
 
   const app = express();
   app.use(cors()); // Allow cross-origin requests
+
+  app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+  app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+  });
 
   // Define the limit of concurrent requests
   const limit = pLimit(5);  // Adjust based on your system's capabilities (5 concurrent requests)
