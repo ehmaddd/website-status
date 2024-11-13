@@ -9,7 +9,7 @@ function App() {
 
   const check = () => {
     checkWebsites();
-    const eventSource = new EventSource('http://localhost:5000/check-websites');
+    const eventSource = new EventSource('/check-websites');
     
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
