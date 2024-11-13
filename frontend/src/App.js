@@ -8,7 +8,6 @@ function App() {
   const [downCount, setDownCount] = useState(0);
 
   const check = () => {
-    checkWebsites();
     const eventSource = new EventSource('http://localhost:5000/check-websites');
     
     eventSource.onmessage = (event) => {
@@ -69,7 +68,7 @@ function App() {
             key={index} 
             className={`status-card ${site.statusText === 'Up' ? 'status-up' : 'status-down'}`}
           >
-            <h5><a href={site.url} target="_blank" className={`site ${site.status===200 ? 'site-up' : 'site-down'}`}>{site.url}</a></h5>
+            <p>{site.url}</p>
             <p className={`status ${site.status === 200 ? 'status-up' : 'status-down'}`}>
               Status: {site.status} ({site.statusText})
             </p>
