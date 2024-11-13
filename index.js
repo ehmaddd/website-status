@@ -8,7 +8,7 @@
   const path = require('path');
 
   const app = express();
-  app.use(cors()); // Allow cross-origin requests
+  app.use(cors());
 
   // Define the limit of concurrent requests
   const limit = pLimit(5);  // Adjust based on your system's capabilities (5 concurrent requests)

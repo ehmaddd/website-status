@@ -9,7 +9,7 @@ function App() {
 
   const check = () => {
     checkWebsites();
-    const eventSource = new EventSource(`${process.env.REACT_APP_API_URL}/check-websites`);
+    const eventSource = new EventSource(`/check-websites`);
     
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
