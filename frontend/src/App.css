@@ -94,7 +94,6 @@ h2 {
 
 .status-card h4 a {
   text-decoration: none;
-  color: #28a745;
 }
 
 .status-card p {
@@ -152,10 +151,10 @@ h2 {
   text-decoration: none;
 }
 
-.site-up {
+.site-up a{
   color: green;
 }
 
-.site-down {
+.site-down a{
   color: red;
 }
