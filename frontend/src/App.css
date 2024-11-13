@@ -24,19 +24,16 @@ h2 {
 }
 
 .check-button {
-  padding: 10px 20px;
+  padding-top: 30px;
+  padding-bottom: 40px;
   background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  margin-bottom: 20px;
-}
-
-.check-button:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
+  width: 15rem;
+  height: 3rem;
 }
 
 .status {
@@ -149,6 +146,16 @@ h2 {
 
 .site {
   text-decoration: none;
+}
+
+.card-up {
+  background-color: lightcoral;
+  opacity: 0.9;
+}
+
+.card-down {
+  background-color: palegreen;
+  opacity: 0.9;
 }
 
 .site-up a{

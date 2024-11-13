@@ -74,7 +74,7 @@ function App() {
           <div className="left">
             <p className="up-count">UP websites: {upCount}</p>
           </div>
-          <button onClick={check}>Check</button>
+          <button className="check-button" onClick={check}>Check</button>
           <div className="right">
             <p className="down-count">DOWN websites: {downCount}</p>
           </div>
