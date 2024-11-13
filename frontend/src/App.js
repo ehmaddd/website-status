@@ -68,7 +68,7 @@ function App() {
             key={index} 
             className={`status-card ${site.statusText === 'Up' ? 'status-up' : 'status-down'}`}
           >
-            <p>{site.url}</p>
+            <h4>{site.url}</h4>
             <p className={`status ${site.status === 200 ? 'status-up' : 'status-down'}`}>
               Status: {site.status} ({site.statusText})
             </p>
