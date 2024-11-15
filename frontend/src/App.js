@@ -3,9 +3,9 @@ import './App.css';
 
 function App() {
   const [statusData, setStatusData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [upCount, setUpCount] = useState(0);
   const [downCount, setDownCount] = useState(0);
+  const [timer, setTimer] = useState(null); // Timer starts as null
 
   // Function to update status and add timestamp
   const check = () => {
@@ -26,7 +26,7 @@ function App() {
           checkedAt: new Date().toLocaleString()  // Store the current date/time
         };
 
-        // For each website, update the status data
+        // Update status data
         setStatusData((prevData) => [...prevData, updatedData]);
 
         // Update the counts continuously as websites are checked
@@ -53,28 +53,53 @@ function App() {
     setStatusData([]);
     setUpCount(0);
     setDownCount(0);
-    setLoading(true);
   };
 
-  // Automatically check websites every 5 minutes
+  // Timer logic
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      check();  // Trigger website check every 5 minutes
-    }, 300000);  // 300000 ms = 5 minutes
+    if (timer === null) return; // Do nothing if timer is not running
 
-    // Clean up the interval when component unmounts
+    const intervalId = setInterval(() => {
+      setTimer((prev) => {
+        if (prev === 1) {
+          // When timer reaches zero, reset and refresh
+          clearInterval(intervalId);
+          check();
+          window.location.reload();
+          return null; // Stop the timer
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
     return () => clearInterval(intervalId);
-  }, []);
+  }, [timer]);
+
+  // Format time for display
+  const formatTime = (time) => {
+    const minutes = String(Math.floor(time / 60)).padStart(2, '0');
+    const seconds = String(time % 60).padStart(2, '0');
+    return `${minutes}:${seconds}`;
+  };
+
+  // Start timer and check websites on button click
+  const handleCheckClick = () => {
+    setTimer(300); // Reset timer to 5 minutes
+    check();       // Start website check
+  };
 
   return (
     <div className="main">
       <header>
         <h2>Website Status Checker</h2>
+        <div className="timer">
+          {timer !== null ? formatTime(timer) : '00:00'}
+        </div>
         <div className="summary">
           <div className="left">
             <p className="up-count">UP websites: {upCount}</p>
           </div>
-          <button className="check-button" onClick={check}>C H E C K</button>
+          <button className="check-button" onClick={handleCheckClick}>C H E C K</button>
           <div className="right">
             <p className="down-count">DOWN websites: {downCount}</p>
           </div>
@@ -87,11 +112,15 @@ function App() {
             key={index} 
             className={`status-card ${site.statusText === 'Up' ? 'status-up' : 'status-down'}`}
           >
-            <h4 className={`${site.status === 200 ? 'site-up' : 'site-down'}`}><a href={site.url} target='_BLANK'>{site.url}</a></h4>
-            <p className={`status ${site.status === 200 ? 'status-up' : 'status-down'}`}>
-              Status: {site.status} ({site.statusText})
-            </p>
-            <p className="checked-at">Checked at: {site.checkedAt}</p> {/* Display the timestamp */}
+            <h4 className={`${site.status === 200 ? 'site-up' : 'site-down'}`}>
+              <a href={site.url} target='_BLANK' rel="noreferrer">{site.url}</a>
+            </h4>
+            <div>
+              <p className={`status ${site.status === 200 ? 'status-up' : 'status-down'}`}>
+                Status: {site.status} ({site.statusText})
+              </p>
+              <p className="checked-at">{site.checkedAt}</p>
+            </div>
           </div>
         ))}
       </div>
