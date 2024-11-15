@@ -57,35 +57,32 @@ function App() {
 
   // Timer logic
   useEffect(() => {
-    if (timer === null) return; // Do nothing if timer is not running
+  if (timer === null) return; // Do nothing if timer is not running
 
-    const intervalId = setInterval(() => {
-      setTimer((prev) => {
-        if (prev === 1) {
-          // When timer reaches zero, reset and refresh
-          clearInterval(intervalId);
-          check();
-          window.location.reload();
-          return null; // Stop the timer
-        }
-        return prev - 1;
-      });
-    }, 1000);
+  const intervalId = setInterval(() => {
+    setTimer((prev) => {
+      if (prev === 1) {
+        // When timer reaches zero, reset and refresh
+        clearInterval(intervalId);
+        check(); // Refresh status check
+        return 300; // Restart timer with initial value
+      }
+      return prev - 1;
+    });
+  }, 1000);
 
-    return () => clearInterval(intervalId);
-  }, [timer]);
+  return () => clearInterval(intervalId);
+}, [timer]);
 
-  // Format time for display
   const formatTime = (time) => {
     const minutes = String(Math.floor(time / 60)).padStart(2, '0');
     const seconds = String(time % 60).padStart(2, '0');
     return `${minutes}:${seconds}`;
   };
 
-  // Start timer and check websites on button click
   const handleCheckClick = () => {
-    setTimer(300); // Reset timer to 5 minutes
-    check();       // Start website check
+    setTimer(300);
+    check();
   };
 
   return (
