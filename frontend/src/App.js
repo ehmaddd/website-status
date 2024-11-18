@@ -85,8 +85,6 @@ function App() {
     check();
   };
 
-  console.log(statusData);
-
   return (
     <div className="main">
       <header>
