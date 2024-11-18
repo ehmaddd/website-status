@@ -102,10 +102,15 @@ function App() {
             key={index} 
             className={`status-card ${site.statusText === 'Up' ? 'status-up' : 'status-down'}`}
           >
-            <h4><a className={`${site.status === 200 ? 'site-up' : 'site-down'}`} href={site.url} target='_BLANK'>{site.url}</a></h4>
-            <p className={`status ${site.status === 200 ? 'status-up' : 'status-down'}`}>
-              Status: {site.status} ({site.statusText})
-            </p>
+            <h4 className={`${site.status === 200 ? 'site-up' : 'site-down'}`}>
+              <a href={site.url} target='_BLANK' rel="noreferrer">{site.url}</a>
+            </h4>
+            <div>
+              <p className={`status ${site.status === 200 ? 'status-up' : 'status-down'}`}>
+                Status: {site.status} ({site.statusText})
+              </p>
+              <p className="checked-at">{site.checkedAt}</p>
+            </div>
           </div>
         ))}
       </div>

@@ -37,13 +37,14 @@ h2 {
 }
 
 .status {
+  display: inline-block;
   padding: 10px 20px;
   border-radius: 20px; /* Round corners to make it button-like */
   color: white;
   font-weight: bold;
   text-align: center;
   font-size: 14px;
-  cursor: default;
+  cursor: pointer;
 }
 
 .status-up {
@@ -58,11 +59,10 @@ h2 {
 .status-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));  /* Cards will fill space, and each card will be at least 220px wide */
-  gap: 0;
+  gap: 15px;
   padding: 0 10px;
   margin-bottom: 20px;
   width: 99%;
-  gap: 0.5rem;
 }
 
 /* Styling for individual status cards */
@@ -80,6 +80,7 @@ h2 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 0.5rem;
 }
 
 .status-card h4 {
@@ -163,14 +164,4 @@ h2 {
 
 .site-down a{
   color: red;
-}
-
-.checked-at {
-  color: sienna;
-  font-weight: bold;
-  border: 1px solid sienna;
-  border-radius: 25px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  text-align: center;
 }
