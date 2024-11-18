@@ -14,6 +14,7 @@ function App() {
     
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      console.log(data);
 
       if (data.summary) {
         // When summary data is received, update the final counts
