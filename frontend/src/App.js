@@ -107,7 +107,7 @@ function App() {
         {statusData.map((site, index) => (
           <div 
             key={index} 
-            className={`status-card ${site.statusText === 'Up' ? 'status-up' : 'status-down'}`}
+            className={`status-card ${site.statusText === 'Up' ? 'card-status-up' : 'card-status-down'}`}
           >
             <h4 className={`${site.status === 200 ? 'site-up' : 'site-down'}`}>
               <a href={site.url} target='_BLANK' rel="noreferrer">{site.url}</a>
