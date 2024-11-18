@@ -9,6 +9,7 @@ header {
   margin: auto;
   text-align: center;
   position: sticky;
+  z-index: 100;
 }
 
 .main {
