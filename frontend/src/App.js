@@ -6,6 +6,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [upCount, setUpCount] = useState(0);
   const [downCount, setDownCount] = useState(0);
+  const [timer, setTimer] = useState(null);
 
   const check = () => {
     checkWebsites();
