@@ -3,11 +3,11 @@ import './App.css';
 
 function App() {
   const [statusData, setStatusData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [upCount, setUpCount] = useState(0);
   const [downCount, setDownCount] = useState(0);
-  const [timer, setTimer] = useState(null);
+  const [timer, setTimer] = useState(null); // Timer starts as null
 
+  // Function to update status and add timestamp
   const check = () => {
     checkWebsites();
     const eventSource = new EventSource(`/check-websites`);
@@ -16,11 +16,20 @@ function App() {
       const data = JSON.parse(event.data);
 
       if (data.summary) {
+        // When summary data is received, update the final counts
         setUpCount(data.summary.upCount);
         setDownCount(data.summary.downCount);
       } else {
-        setStatusData((prevData) => [...prevData, data]);
+        // Add timestamp to each website status data
+        const updatedData = { 
+          ...data, 
+          checkedAt: new Date().toLocaleString()  // Store the current date/time
+        };
 
+        // Update status data
+        setStatusData((prevData) => [...prevData, updatedData]);
+
+        // Update the counts continuously as websites are checked
         if (data.statusText === 'Up') {
           setUpCount((prevCount) => prevCount + 1);
         } else if (data.statusText === 'Down') {
@@ -39,41 +48,42 @@ function App() {
     };
   };
 
+  // Function to reset the state before checking websites
   const checkWebsites = () => {
     setStatusData([]);
     setUpCount(0);
     setDownCount(0);
-    setLoading(true);
   };
 
-    // Timer logic
-    useEffect(() => {
-      if (timer === null) return;
-    
-      const intervalId = setInterval(() => {
-        setTimer((prev) => {
-          if (prev === 1) {
-            clearInterval(intervalId);
-            check();
-            return 300;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    
-      return () => clearInterval(intervalId);
-    }, [timer]);
-    
-    const formatTime = (time) => {
-      const minutes = String(Math.floor(time / 60)).padStart(2, '0');
-      const seconds = String(time % 60).padStart(2, '0');
-      return `${minutes}:${seconds}`;
-    };
+  // Timer logic
+  useEffect(() => {
+  if (timer === null) return; // Do nothing if timer is not running
 
-    const handleCheckClick = () => {
-      setTimer(300);
-      check();
-    };
+  const intervalId = setInterval(() => {
+    setTimer((prev) => {
+      if (prev === 1) {
+        // When timer reaches zero, reset and refresh
+        clearInterval(intervalId);
+        check(); // Refresh status check
+        return 300; // Restart timer with initial value
+      }
+      return prev - 1;
+    });
+  }, 1000);
+
+  return () => clearInterval(intervalId);
+}, [timer]);
+
+  const formatTime = (time) => {
+    const minutes = String(Math.floor(time / 60)).padStart(2, '0');
+    const seconds = String(time % 60).padStart(2, '0');
+    return `${minutes}:${seconds}`;
+  };
+
+  const handleCheckClick = () => {
+    setTimer(300);
+    check();
+  };
 
   return (
     <div className="main">
