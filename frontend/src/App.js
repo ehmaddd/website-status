@@ -48,15 +48,48 @@ function App() {
     setLoading(true);
   };
 
+    // Timer logic
+    useEffect(() => {
+      if (timer === null) return; // Do nothing if timer is not running
+    
+      const intervalId = setInterval(() => {
+        setTimer((prev) => {
+          if (prev === 1) {
+            // When timer reaches zero, reset and refresh
+            clearInterval(intervalId);
+            check(); // Refresh status check
+            return 300; // Restart timer with initial value
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    
+      return () => clearInterval(intervalId);
+    }, [timer]);
+    
+    const formatTime = (time) => {
+      const minutes = String(Math.floor(time / 60)).padStart(2, '0');
+      const seconds = String(time % 60).padStart(2, '0');
+      return `${minutes}:${seconds}`;
+    };
+
+    const handleCheckClick = () => {
+      setTimer(300);
+      check();
+    };
+
   return (
     <div className="main">
       <header>
         <h2>Website Status Checker</h2>
+        <div className="timer">
+          {timer !== null ? formatTime(timer) : '00:00'}
+        </div>
         <div className="summary">
           <div className="left">
             <p className="up-count">UP websites: {upCount}</p>
           </div>
-          <button onClick={check} className="check-button">Check</button>
+          <button className="check-button" onClick={handleCheckClick}>C H E C K</button>
           <div className="right">
             <p className="down-count">DOWN websites: {downCount}</p>
           </div>
@@ -69,10 +102,15 @@ function App() {
             key={index} 
             className={`status-card ${site.statusText === 'Up' ? 'status-up' : 'status-down'}`}
           >
-            <h4><a className={`${site.status === 200 ? 'site-up' : 'site-down'}`} href={site.url} target='_BLANK'>{site.url}</a></h4>
-            <p className={`status ${site.status === 200 ? 'status-up' : 'status-down'}`}>
-              Status: {site.status} ({site.statusText})
-            </p>
+            <h4 className={`${site.status === 200 ? 'site-up' : 'site-down'}`}>
+              <a href={site.url} target='_BLANK' rel="noreferrer">{site.url}</a>
+            </h4>
+            <div>
+              <p className={`status ${site.status === 200 ? 'status-up' : 'status-down'}`}>
+                Status: {site.status} ({site.statusText})
+              </p>
+              <p className="checked-at">{site.checkedAt}</p>
+            </div>
           </div>
         ))}
       </div>

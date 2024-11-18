@@ -24,13 +24,16 @@ h2 {
 }
 
 .check-button {
-  background-color: black;
-  color: #fff;
-  border: none;
+  padding-top: 30px;
+  padding-bottom: 40px;
+  background-color: blue;
+  color: white;
+  border: 2px solid gold;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  padding: 10px;
+  width: 15rem;
+  height: 3rem;
 }
 
 .status {
@@ -88,7 +91,6 @@ h2 {
 
 .status-card h4 a {
   text-decoration: none;
-  color: #28a745;
 }
 
 .status-card p {
@@ -146,10 +148,20 @@ h2 {
   text-decoration: none;
 }
 
-.site-up {
+.card-up {
+  background-color: lightcoral;
+  opacity: 0.9;
+}
+
+.card-down {
+  background-color: palegreen;
+  opacity: 0.9;
+}
+
+.site-up a{
   color: green;
 }
 
-.site-down {
+.site-down a{
   color: red;
 }
