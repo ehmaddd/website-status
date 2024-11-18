@@ -15,14 +15,11 @@ function App() {
       const data = JSON.parse(event.data);
 
       if (data.summary) {
-        // When summary data is received, update the final counts
         setUpCount(data.summary.upCount);
         setDownCount(data.summary.downCount);
       } else {
-        // For each website, update the status data
         setStatusData((prevData) => [...prevData, data]);
 
-        // Update the counts continuously as websites are checked
         if (data.statusText === 'Up') {
           setUpCount((prevCount) => prevCount + 1);
         } else if (data.statusText === 'Down') {
@@ -50,15 +47,14 @@ function App() {
 
     // Timer logic
     useEffect(() => {
-      if (timer === null) return; // Do nothing if timer is not running
+      if (timer === null) return;
     
       const intervalId = setInterval(() => {
         setTimer((prev) => {
           if (prev === 1) {
-            // When timer reaches zero, reset and refresh
             clearInterval(intervalId);
-            check(); // Refresh status check
-            return 300; // Restart timer with initial value
+            check();
+            return 300;
           }
           return prev - 1;
         });
