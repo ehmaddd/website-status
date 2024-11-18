@@ -5,9 +5,8 @@ function App() {
   const [statusData, setStatusData] = useState([]);
   const [upCount, setUpCount] = useState(0);
   const [downCount, setDownCount] = useState(0);
-  const [timer, setTimer] = useState(null); // Timer starts as null
+  const [timer, setTimer] = useState(null);
 
-  // Function to update status and add timestamp
   const check = () => {
     checkWebsites();
     const eventSource = new EventSource('http://localhost:5000/check-websites');
@@ -16,20 +15,16 @@ function App() {
       const data = JSON.parse(event.data);
 
       if (data.summary) {
-        // When summary data is received, update the final counts
         setUpCount(data.summary.upCount);
         setDownCount(data.summary.downCount);
       } else {
-        // Add timestamp to each website status data
         const updatedData = { 
           ...data, 
-          checkedAt: new Date().toLocaleString()  // Store the current date/time
+          checkedAt: new Date().toLocaleString()
         };
 
-        // Update status data
         setStatusData((prevData) => [...prevData, updatedData]);
 
-        // Update the counts continuously as websites are checked
         if (data.statusText === 'Up') {
           setUpCount((prevCount) => prevCount + 1);
         } else if (data.statusText === 'Down') {
@@ -48,24 +43,21 @@ function App() {
     };
   };
 
-  // Function to reset the state before checking websites
   const checkWebsites = () => {
     setStatusData([]);
     setUpCount(0);
     setDownCount(0);
   };
 
-  // Timer logic
   useEffect(() => {
-  if (timer === null) return; // Do nothing if timer is not running
+  if (timer === null) return;
 
   const intervalId = setInterval(() => {
     setTimer((prev) => {
       if (prev === 1) {
-        // When timer reaches zero, reset and refresh
         clearInterval(intervalId);
-        check(); // Refresh status check
-        return 300; // Restart timer with initial value
+        check();
+        return 300;
       }
       return prev - 1;
     });

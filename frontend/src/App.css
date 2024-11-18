@@ -37,7 +37,6 @@ h2 {
 }
 
 .status {
-  display: inline-block;
   padding: 10px 20px;
   border-radius: 20px; /* Round corners to make it button-like */
   color: white;
@@ -164,4 +163,13 @@ h2 {
 
 .site-down a{
   color: red;
+}
+
+.checked-at {
+  background-color: darkgoldenrod;
+  border: 1px solid darkgoldenrod;
+  border-radius: 32px;
+  padding: 0.55rem;
+  color: white;
+  text-align: center;
 }
