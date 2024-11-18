@@ -14,7 +14,6 @@ function App() {
     
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log(data);
 
       if (data.summary) {
         // When summary data is received, update the final counts
@@ -85,6 +84,8 @@ function App() {
     setTimer(300);
     check();
   };
+
+  console.log(statusData);
 
   return (
     <div className="main">
