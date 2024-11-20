@@ -15,10 +15,10 @@
   const limit = pLimit(5);  // Adjust based on your system's capabilities (5 concurrent requests)
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail', // Or any other service like SMTP server details
+    service: 'Yahoo',
     auth: {
-      user: 'your-email@gmail.com', // Replace with your email
-      pass: 'your-email-password', // Replace with your email password or an App Password
+      user: 'ehmaddd@yahoo.com', // Replace with your Yahoo email
+      pass: 'qxnswqatonphrerl', // Replace with the App Password you generated in Yahoo
     },
   });
 
@@ -29,7 +29,7 @@
     res.setHeader('Connection', 'keep-alive');
     res.flushHeaders();
 
-    const websites = require('./websites');  // Assuming the websites are in a separate file
+    const websites = require('./websites');
 
     let upCount = 0;
     let downCount = 0;
@@ -56,30 +56,31 @@
   });
 
   app.post('/send-emails', async (req, res) => {
-    const { emails } = req.body; // Array of email addresses
-  
-    if (!emails || !Array.isArray(emails)) {
-      return res.status(400).send('Invalid email addresses');
+    const { subject, text, emails } = req.body;
+
+    // Ensure that emails, subject, and text are provided in the request body
+    if (!emails || emails.length === 0 || !subject || !text) {
+        return res.status(400).send('Please provide to, subject, and text for the email');
     }
-  
+
+    // Create a mailOptions object with the provided subject, text, and emails
     const mailOptions = {
-      from: 'your-email@gmail.com', // Sender address
-      subject: 'Test Email', // Subject line
-      text: 'This is a test email sent from the backend.', // Email body
+        from: '"Ahmad Saeed" ehmaddd@yahoo.com',
+        to: emails.join(', '),      // Join the email addresses in a comma-separated string
+        subject: subject,           // Subject of the email
+        text: text,                 // Body of the email (text)
     };
-  
+
     try {
-      // Send emails to all addresses in the emails array
-      for (const email of emails) {
-        mailOptions.to = email; // Set the recipient
-  
-        // Send the email
+        // Send the email using the transporter object (assumed to be set up previously)
         await transporter.sendMail(mailOptions);
-      }
-      res.status(200).send('Emails sent successfully');
+
+        // Respond with a success message
+        res.status(200).send('Emails sent successfully');
     } catch (error) {
-      console.error('Error sending emails:', error);
-      res.status(500).send('Error sending emails');
+        // If an error occurs, log it and send an error response
+        console.error('Error sending email:', error);
+        res.status(500).send('Error sending email');
     }
   });
 
