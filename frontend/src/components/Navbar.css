@@ -1,0 +1,37 @@
+nav {
+  display: flex;
+  width: 100%;
+}
+
+nav ul {
+  background-color: darkcyan;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  width: 100%;
+}
+
+nav li {
+  background-color: darkgoldenrod;
+  flex: 1;
+  text-align: center;
+  border: 1px solid #ddd;
+  padding: 10px 0;
+  position: relative;
+  background: linear-gradient(90deg, red, yellow, green);
+  background-size: 400%;
+  background-position: 0%;
+  transition: background-position 1s ease-in-out;
+}
+
+
+nav li:hover {
+  background-position: 100%;
+}
+
+nav li a {
+  text-decoration: none;
+  color: yellow;
+  display: block;
+}
