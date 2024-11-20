@@ -1,0 +1,121 @@
+/* Mail.css */
+.mail-container {
+    width: 97%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  textarea.input-field {
+    min-height: 100px;
+  }
+  
+  .email-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .email-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(25% - 30px); /* 4 emails per row with accounting for gap */
+    background-color: #e2e6ea;
+    padding: 8px;
+    border-radius: 4px;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .email-text {
+    flex-grow: 1;
+    word-wrap: break-word;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+  }
+  
+  .remove-btn {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .remove-btn:hover {
+    background-color: red;
+  }
+
+  .remove-btn:disabled {
+    background-color: #ddd;
+  }
+  
+  .add-btn, .send-btn {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  .add-btn:disabled, .send-btn:disabled {
+    background-color: #ddd;
+  }
+  
+  .message {
+    text-align: center;
+    margin-top: 20px;
+    color: green;
+  }
+  
+  button:hover {
+    opacity: 0.9;
+  }
+  
+  @media (max-width: 768px) {
+    .email-item {
+      width: calc(50% - 10px); /* 2 emails per row on smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .email-item {
+      width: 100%; /* 1 email per row on very small screens */
+    }
+  }
+  
