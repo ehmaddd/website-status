@@ -1,0 +1,26 @@
+nav {
+  display: flex; /* Use flexbox for layout */
+  width: 100%; /* Make the navbar span the entire width of the page */
+  background-color: #f4f4f4; /* Add a background color for visibility */
+}
+
+nav ul {
+  display: flex; /* Set the list to flex layout */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+  list-style-type: none; /* Remove bullet points */
+  width: 100%; /* Ensure the UL spans the whole page */
+}
+
+nav li {
+  flex: 1; /* Each <li> takes an equal amount of space */
+  text-align: center; /* Center align the text inside each <li> */
+  border: 1px solid #ddd; /* Optional: Add a border for separation */
+  padding: 10px 0; /* Add some padding */
+}
+
+nav li a {
+  text-decoration: none; /* Remove underline from links */
+  color: #333; /* Set text color */
+  display: block; /* Make the link fill the entire <li> */
+}
