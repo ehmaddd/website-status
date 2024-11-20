@@ -1,26 +1,37 @@
 nav {
-  display: flex; /* Use flexbox for layout */
-  width: 100%; /* Make the navbar span the entire width of the page */
-  background-color: #f4f4f4; /* Add a background color for visibility */
+  display: flex;
+  width: 100%;
 }
 
 nav ul {
-  display: flex; /* Set the list to flex layout */
-  margin: 0; /* Remove default margin */
-  padding: 0; /* Remove default padding */
-  list-style-type: none; /* Remove bullet points */
-  width: 100%; /* Ensure the UL spans the whole page */
+  background-color: darkcyan;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  width: 100%;
 }
 
 nav li {
-  flex: 1; /* Each <li> takes an equal amount of space */
-  text-align: center; /* Center align the text inside each <li> */
-  border: 1px solid #ddd; /* Optional: Add a border for separation */
-  padding: 10px 0; /* Add some padding */
+  background-color: darkgoldenrod;
+  flex: 1;
+  text-align: center;
+  border: 1px solid #ddd;
+  padding: 10px 0;
+  position: relative;
+  background: linear-gradient(90deg, red, yellow, green);
+  background-size: 400%;
+  background-position: 0%;
+  transition: background-position 1s ease-in-out;
+}
+
+
+nav li:hover {
+  background-position: 100%;
 }
 
 nav li a {
-  text-decoration: none; /* Remove underline from links */
-  color: #333; /* Set text color */
-  display: block; /* Make the link fill the entire <li> */
+  text-decoration: none;
+  color: yellow;
+  display: block;
 }
