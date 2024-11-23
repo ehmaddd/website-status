@@ -38,6 +38,8 @@ nav li:hover {
 
 nav li a {
   text-decoration: none;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
   color: yellow;
   display: block;
 }

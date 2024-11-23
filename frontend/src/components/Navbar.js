@@ -7,10 +7,10 @@ function Navbar() {
     <nav>
       <ul>
         <li>
-          <Link to="/">Status</Link>
+          <Link to="/">Website status</Link>
         </li>
         <li>
-          <Link to="/mail">Mail</Link>
+          <Link to="/mail">Send e-mails</Link>
         </li>
       </ul>
     </nav>
