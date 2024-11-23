@@ -1,0 +1,7 @@
+.timer {
+  width: 20%;
+  height: 1.5rem;
+  margin: auto;
+  background-color: #ff7f50;
+  z-index: 100;
+}

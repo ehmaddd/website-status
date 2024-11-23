@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './Status.css';
 
 function Status() {
   const [statusData, setStatusData] = useState([]);
