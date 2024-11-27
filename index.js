@@ -6,6 +6,8 @@
   const axios = require('axios');
   const cors = require('cors');
   const path = require('path');
+  const Imap = require('imap');
+  const { simpleParser } = require('mailparser');
 
   const app = express();
   app.use(cors());
