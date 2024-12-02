@@ -119,23 +119,7 @@
     }
   }
   
-  .email-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px;
-  }
-  
-  .email-item.matched {
-    background-color: lightgreen; /* Highlight matched emails with a light green background */
-  }
-  
-  .email-text {
-    font-size: 14px;
-  }
-  
-  .remove-btn {
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    color: red;
+  .matched {
+    background-color: #d4edda; /* Light green background */
+    color: #155724; /* Darker green text color */
   }
