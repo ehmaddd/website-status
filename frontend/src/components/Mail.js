@@ -14,6 +14,7 @@ const Mail = () => {
   const [retryCount, setRetryCount] = useState(0);
   const [sendTime, setSendTime] = useState(null); // Store the send time
   const [fetchingEmails, setFetchingEmails] = useState(false); // Control when to start fetching emails
+  const [matchedEmails, setMatchedEmails] = useState(new Set()); // Track matched emails
 
   const handleSubjectChange = (event) => {
     setSubject(event.target.value);
@@ -92,7 +93,7 @@ const Mail = () => {
       eventSource.onmessage = (event) => {
         try {
           const email = JSON.parse(event.data);
-      
+
           // Extract only the required fields
           const simplifiedEmail = {
             sender: email.from?.text,
@@ -115,6 +116,11 @@ const Mail = () => {
               }
               return prevMails;
             });
+
+            // Check if the received email matches any of the email addresses in the list
+            if (emailAddresses.includes(simplifiedEmail.sender?.toLowerCase())) {
+              setMatchedEmails((prev) => new Set(prev.add(simplifiedEmail.sender?.toLowerCase())));
+            }
           }
         } catch (error) {
           console.error('Error parsing email data:', error);
@@ -140,23 +146,10 @@ const Mail = () => {
       eventSource.close();
       clearTimeout(retryTimeout); // Clear retry timer on unmount
     };
-  }, [fetchingEmails, sendTime]); // The effect depends on the fetchingEmails and sendTime state
+  }, [fetchingEmails, sendTime, emailAddresses]); // The effect depends on fetchingEmails, sendTime, and emailAddresses
 
   return (
     <div className="mail-container">
-      <div>
-        <h1>Emails</h1>
-        <ul>
-          {mails.map((email, index) => (
-            <li key={index}>
-              <strong>From:</strong> {email.sender} <br />
-              <strong>Subject:</strong> {email.subject} <br />
-              <strong>Time:</strong> {email.date ? new Date(email.date).toLocaleString() : 'N/A'}
-            </li>
-          ))}
-        </ul>
-      </div>
-
       <div className="form-group">
         <label>
           Subject:
