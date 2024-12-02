@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './Status.css';
 
 function Status() {
   const [statusData, setStatusData] = useState([]);
@@ -80,6 +79,7 @@ function Status() {
   return (
     <div className="main">
       <header>
+
         <div className="timer">
           {timer !== null ? formatTime(timer) : '00:00'}
         </div>
