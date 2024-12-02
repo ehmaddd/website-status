@@ -7,13 +7,13 @@ const Mail = () => {
   const [sending, setSending] = useState(false);
   const [message, setMessage] = useState('');
   const [emailAddresses, setEmailAddresses] = useState(emails);
-
   const [subject, setSubject] = useState('');
   const [text, setText] = useState('');
   const [emailInput, setEmailInput] = useState('');
-
   const [mails, setMails] = useState([]);
   const [retryCount, setRetryCount] = useState(0);
+  const [sendTime, setSendTime] = useState(null); // Store the send time
+  const [fetchingEmails, setFetchingEmails] = useState(false); // Control when to start fetching emails
 
   const handleSubjectChange = (event) => {
     setSubject(event.target.value);
@@ -56,6 +56,7 @@ const Mail = () => {
   const sendEmails = async () => {
     setSending(true);
     setMessage('');
+    setSendTime(new Date()); // Record the current time when emails are sent
 
     try {
       const response = await axios.post('http://localhost:5000/send-emails', {
@@ -64,6 +65,9 @@ const Mail = () => {
         text: text,
       });
       setMessage(response.data);
+
+      // After emails are sent, start fetching emails
+      setFetchingEmails(true); // Now start fetching emails
     } catch (error) {
       setMessage('Error sending emails: ' + error.message);
     } finally {
@@ -72,23 +76,22 @@ const Mail = () => {
   };
 
   useEffect(() => {
+    if (!fetchingEmails) return; // Don't start fetching emails unless the flag is true
+
     let retryTimeout;
-  
+
     const connectToEventSource = () => {
       console.log('Connecting to EventSource...');
       const eventSource = new EventSource('http://localhost:5000/fetch-emails');
-  
+
       eventSource.onopen = () => {
         console.log('Connected to EventSource');
         setRetryCount(0); // Reset retry count on successful connection
       };
-  
+
       eventSource.onmessage = (event) => {
         try {
           const email = JSON.parse(event.data);
-          const [dateStr, timeStr] = email.date.split("T");
-          console.log(timeStr);
-
       
           // Extract only the required fields
           const simplifiedEmail = {
@@ -96,60 +99,62 @@ const Mail = () => {
             subject: email.subject,
             date: email.date, // Ensure this field exists in your data
           };
-      
-          // Avoid duplicates based on sender, subject, and time
-          setMails((prevMails) => {
-            if (
-              !prevMails.some(
-                (mail) =>
-                  mail.sender === simplifiedEmail.sender &&
-                  mail.subject === simplifiedEmail.subject &&
-                  mail.time === simplifiedEmail.time
-              )
-            ) {
-              return [...prevMails, simplifiedEmail];
-            }
-            return prevMails;
-          });
+
+          // Only update the mails state if the email was received after the send time
+          if (sendTime && new Date(email.date) > sendTime) {
+            setMails((prevMails) => {
+              if (
+                !prevMails.some(
+                  (mail) =>
+                    mail.sender === simplifiedEmail.sender &&
+                    mail.subject === simplifiedEmail.subject &&
+                    mail.date === simplifiedEmail.date
+                )
+              ) {
+                return [...prevMails, simplifiedEmail];
+              }
+              return prevMails;
+            });
+          }
         } catch (error) {
           console.error('Error parsing email data:', error);
         }
       };
-  
+
       eventSource.onerror = (error) => {
         console.error('Error in EventSource:', error);
         eventSource.close();
         setRetryCount((prev) => prev + 1);
-  
+
         // Retry connection after 5 seconds
         retryTimeout = setTimeout(connectToEventSource, 5000);
       };
-  
+
       return eventSource;
     };
-  
+
     const eventSource = connectToEventSource();
-  
+
     return () => {
       console.log('Cleaning up EventSource');
       eventSource.close();
       clearTimeout(retryTimeout); // Clear retry timer on unmount
     };
-  }, []);
+  }, [fetchingEmails, sendTime]); // The effect depends on the fetchingEmails and sendTime state
 
   return (
     <div className="mail-container">
       <div>
         <h1>Emails</h1>
         <ul>
-    {mails.map((email, index) => (
-      <li key={index}>
-        <strong>From:</strong> {email.sender} <br />
-        <strong>Subject:</strong> {email.subject} <br />
-        <strong>Time:</strong> {email.date ? new Date(email.date).toLocaleString() : 'N/A'}
-      </li>
-    ))}
-  </ul>
+          {mails.map((email, index) => (
+            <li key={index}>
+              <strong>From:</strong> {email.sender} <br />
+              <strong>Subject:</strong> {email.subject} <br />
+              <strong>Time:</strong> {email.date ? new Date(email.date).toLocaleString() : 'N/A'}
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div className="form-group">
