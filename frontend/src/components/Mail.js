@@ -101,6 +101,8 @@ const Mail = () => {
             date: email.date, // Ensure this field exists in your data
           };
 
+          console.log(simplifiedEmail);
+
           // Only update the mails state if the email was received after the send time
           if (sendTime && new Date(email.date) > sendTime) {
             setMails((prevMails) => {

@@ -119,12 +119,23 @@
     }
   }
   
-  li {
-    padding: 10px;
-    margin: 5px 0;
+  .email-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
   }
   
-  li.green {
-    background-color: green;
-    color: white;
+  .email-item.matched {
+    background-color: lightgreen; /* Highlight matched emails with a light green background */
+  }
+  
+  .email-text {
+    font-size: 14px;
+  }
+  
+  .remove-btn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    color: red;
   }
