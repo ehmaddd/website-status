@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import emails from './emails';
 import './Mail.css';
 import axios from 'axios';
@@ -12,6 +12,9 @@ const Mail = () => {
   const [text, setText] = useState('');
   const [emailInput, setEmailInput] = useState('');
 
+  const [mails, setMails] = useState([]);
+  const [retryCount, setRetryCount] = useState(0);
+
   const handleSubjectChange = (event) => {
     setSubject(event.target.value);
   };
@@ -24,15 +27,30 @@ const Mail = () => {
     setEmailInput(event.target.value);
   };
 
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const addEmail = () => {
-    if (emailInput && !emailAddresses.includes(emailInput)) {
-      setEmailAddresses([...emailAddresses, emailInput]);
-      setEmailInput('');
+    const normalizedEmail = emailInput.trim().toLowerCase();
+
+    if (!isValidEmail(normalizedEmail)) {
+      alert('Invalid email address format.');
+      return;
     }
+
+    if (emailAddresses.includes(normalizedEmail)) {
+      alert('Duplicate email address not allowed.');
+      return;
+    }
+
+    setEmailAddresses((prevEmails) => [...prevEmails, normalizedEmail]);
+    setEmailInput('');
   };
 
   const removeEmail = (email) => {
-    setEmailAddresses(emailAddresses.filter((e) => e !== email));
+    setEmailAddresses((prevEmails) => prevEmails.filter((e) => e !== email));
   };
 
   const sendEmails = async () => {
@@ -43,7 +61,7 @@ const Mail = () => {
       const response = await axios.post('http://localhost:5000/send-emails', {
         emails: emailAddresses,
         subject: subject,
-        text: text
+        text: text,
       });
       setMessage(response.data);
     } catch (error) {
@@ -53,10 +71,87 @@ const Mail = () => {
     }
   };
 
+  useEffect(() => {
+    let retryTimeout;
+  
+    const connectToEventSource = () => {
+      console.log('Connecting to EventSource...');
+      const eventSource = new EventSource('http://localhost:5000/fetch-emails');
+  
+      eventSource.onopen = () => {
+        console.log('Connected to EventSource');
+        setRetryCount(0); // Reset retry count on successful connection
+      };
+  
+      eventSource.onmessage = (event) => {
+        try {
+          const email = JSON.parse(event.data);
+          const [dateStr, timeStr] = email.date.split("T");
+          console.log(timeStr);
+
+      
+          // Extract only the required fields
+          const simplifiedEmail = {
+            sender: email.from?.text,
+            subject: email.subject,
+            date: email.date, // Ensure this field exists in your data
+          };
+      
+          // Avoid duplicates based on sender, subject, and time
+          setMails((prevMails) => {
+            if (
+              !prevMails.some(
+                (mail) =>
+                  mail.sender === simplifiedEmail.sender &&
+                  mail.subject === simplifiedEmail.subject &&
+                  mail.time === simplifiedEmail.time
+              )
+            ) {
+              return [...prevMails, simplifiedEmail];
+            }
+            return prevMails;
+          });
+        } catch (error) {
+          console.error('Error parsing email data:', error);
+        }
+      };
+  
+      eventSource.onerror = (error) => {
+        console.error('Error in EventSource:', error);
+        eventSource.close();
+        setRetryCount((prev) => prev + 1);
+  
+        // Retry connection after 5 seconds
+        retryTimeout = setTimeout(connectToEventSource, 5000);
+      };
+  
+      return eventSource;
+    };
+  
+    const eventSource = connectToEventSource();
+  
+    return () => {
+      console.log('Cleaning up EventSource');
+      eventSource.close();
+      clearTimeout(retryTimeout); // Clear retry timer on unmount
+    };
+  }, []);
+
   return (
     <div className="mail-container">
+      <div>
+        <h1>Emails</h1>
+        <ul>
+    {mails.map((email, index) => (
+      <li key={index}>
+        <strong>From:</strong> {email.sender} <br />
+        <strong>Subject:</strong> {email.subject} <br />
+        <strong>Time:</strong> {email.date ? new Date(email.date).toLocaleString() : 'N/A'}
+      </li>
+    ))}
+  </ul>
+      </div>
 
-      {/* Form to input subject and text */}
       <div className="form-group">
         <label>
           Subject:
@@ -84,7 +179,6 @@ const Mail = () => {
         </label>
       </div>
 
-      {/* Email Addresses section */}
       <div className="form-group">
         <div className="email-list">
           {emailAddresses.length > 0 ? (
@@ -106,7 +200,6 @@ const Mail = () => {
         </div>
       </div>
 
-      {/* Input to add new email addresses */}
       <div className="form-group">
         <input
           type="email"
@@ -125,7 +218,6 @@ const Mail = () => {
         </button>
       </div>
 
-      {/* Send email button */}
       <button
         className="send-btn"
         onClick={sendEmails}
@@ -134,7 +226,6 @@ const Mail = () => {
         {sending ? 'Sending...' : 'Send Emails'}
       </button>
 
-      {/* Display message or error */}
       {message && <p>{message}</p>}
     </div>
   );

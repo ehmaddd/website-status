@@ -24,6 +24,72 @@
     },
   });
 
+  function fetchEmails(res) {
+    const imap = new Imap({
+      user: 'ehmaddd@yahoo.com',
+      password: 'qxnswqatonphrerl',
+      host: 'imap.mail.yahoo.com',
+      port: 993,
+      tls: true,
+    });
+  
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString('en-GB', { 
+      day: '2-digit', 
+      month: 'short', 
+      year: 'numeric' 
+    }).replace(/ /g, '-'); // Format as DD-MMM-YYYY
+  
+    imap.once('ready', () => {
+      imap.openBox('INBOX', false, (err, box) => {
+        if (err) throw err;
+  
+        // Search for emails received today
+        imap.search([['ON', formattedDate]], (err, results) => {
+          if (err) {
+            res.write(`data: ${JSON.stringify({ error: 'Error fetching emails' })}\n\n`);
+            res.end();
+            return;
+          }
+  
+          if (!results || results.length === 0) {
+            res.write(`data: ${JSON.stringify({ message: 'No emails received today' })}\n\n`);
+            res.end();
+            return;
+          }
+  
+          const fetcher = imap.fetch(results, { bodies: '' });
+          fetcher.on('message', (msg) => {
+            msg.on('body', (stream) => {
+              simpleParser(stream, (err, mail) => {
+                if (err) return console.error('Error parsing email:', err);
+  
+                // Extract the email date
+                const emailDate = mail.date ? mail.date.toISOString() : 'Unknown date';
+  
+                // Send the parsed email data along with the date to the client
+                res.write(`data: ${JSON.stringify({ ...mail, receivedDate: emailDate })}\n\n`);
+              });
+            });
+          });
+  
+          fetcher.once('end', () => {
+            res.end(); // End the SSE stream
+            imap.end();
+          });
+        });
+      });
+    });
+  
+    imap.once('error', (err) => {
+      console.error(err);
+      res.write(`data: ${JSON.stringify({ error: 'IMAP connection error' })}\n\n`);
+      res.end();
+    });
+  
+    imap.connect();
+  }
+
   // Endpoint to check the status of multiple websites
   app.get('/check-websites', async (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
@@ -84,6 +150,15 @@
         console.error('Error sending email:', error);
         res.status(500).send('Error sending email');
     }
+  });
+
+  app.get('/fetch-emails', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+  
+    fetchEmails(res); // Call the fetchEmails function
   });
 
   const PORT = 5000;
