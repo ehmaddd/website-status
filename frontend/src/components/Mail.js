@@ -15,6 +15,7 @@ const Mail = () => {
   const [sendTime, setSendTime] = useState(null); // Store the send time
   const [fetchingEmails, setFetchingEmails] = useState(false); // Control when to start fetching emails
   const [matchedEmails, setMatchedEmails] = useState(new Set()); // Track matched emails
+  const [isRemoveBtnVisible, setIsRemoveBtnVisible] = useState(true);
 
   const handleSubjectChange = (event) => {
     setSubject(event.target.value);
@@ -55,6 +56,7 @@ const Mail = () => {
   };
 
   const sendEmails = async () => {
+    setIsRemoveBtnVisible(false);
     setSending(true);
     setMessage('');
     setSendTime(new Date()); // Record the current time when emails are sent
@@ -193,13 +195,15 @@ const Mail = () => {
                 className={`email-item ${matchedEmails.has(email.toLowerCase()) ? 'matched' : ''}`}
               >
                 <span className="email-text">{email}</span>
-                <button
+                {isRemoveBtnVisible && 
+                  <button
                   className="remove-btn"
                   onClick={() => removeEmail(email)}
                   disabled={sending}
                 >
                   &times;
                 </button>
+                }
               </div>
             ))
           ) : (
