@@ -78,31 +78,36 @@ const Mail = () => {
 
   useEffect(() => {
     if (!fetchingEmails) return; // Don't start fetching emails unless the flag is true
-
+  
     let retryTimeout;
-
+  
     const connectToEventSource = () => {
       console.log('Connecting to EventSource...');
       const eventSource = new EventSource('http://localhost:5000/fetch-emails');
-
+  
       eventSource.onopen = () => {
         console.log('Connected to EventSource');
         setRetryCount(0); // Reset retry count on successful connection
       };
-
+  
       eventSource.onmessage = (event) => {
         try {
           const email = JSON.parse(event.data);
-
+  
           // Extract only the required fields
           const simplifiedEmail = {
-            sender: email.from?.text,
+            sender: email.from?.text, // e.g., "Ahmed Saeed <ehmaddd@gmail.com>"
             subject: email.subject,
             date: email.date, // Ensure this field exists in your data
           };
-
+  
           console.log(simplifiedEmail);
-
+  
+          // Extract the email address from the sender string using regex
+          const emailRegex = /<([^>]+)>/;
+          const match = simplifiedEmail.sender?.match(emailRegex);
+          const senderEmail = match ? match[1].toLowerCase() : ''; // Extracted and lowercased email
+  
           // Only update the mails state if the email was received after the send time
           if (sendTime && new Date(email.date) > sendTime) {
             setMails((prevMails) => {
@@ -118,37 +123,37 @@ const Mail = () => {
               }
               return prevMails;
             });
-
-            // Check if the received email matches any of the email addresses in the list
-            if (emailAddresses.includes(simplifiedEmail.sender?.toLowerCase())) {
-              setMatchedEmails((prev) => new Set(prev.add(simplifiedEmail.sender?.toLowerCase())));
+  
+            // Check if the extracted sender's email matches any of the email addresses in the list
+            if (emailAddresses.includes(senderEmail)) {
+              setMatchedEmails((prev) => new Set(prev.add(senderEmail)));
             }
           }
         } catch (error) {
           console.error('Error parsing email data:', error);
         }
       };
-
+  
       eventSource.onerror = (error) => {
         console.error('Error in EventSource:', error);
         eventSource.close();
         setRetryCount((prev) => prev + 1);
-
+  
         // Retry connection after 5 seconds
         retryTimeout = setTimeout(connectToEventSource, 5000);
       };
-
+  
       return eventSource;
     };
-
+  
     const eventSource = connectToEventSource();
-
+  
     return () => {
       console.log('Cleaning up EventSource');
       eventSource.close();
-      clearTimeout(retryTimeout); // Clear retry timer on unmount
+      clearTimeout(retryTimeout);
     };
-  }, [fetchingEmails, sendTime, emailAddresses]); // The effect depends on fetchingEmails, sendTime, and emailAddresses
+  }, [fetchingEmails, sendTime, emailAddresses]);
 
   return (
     <div className="mail-container">
