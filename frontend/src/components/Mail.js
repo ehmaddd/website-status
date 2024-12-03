@@ -16,6 +16,8 @@ const Mail = () => {
   const [fetchingEmails, setFetchingEmails] = useState(false);
   const [matchedEmails, setMatchedEmails] = useState(new Set());
   const [isRemoveBtnVisible, setIsRemoveBtnVisible] = useState(true);
+  const [receivedCount, setReceivedCount] = useState(0);
+  const sentCount = emailAddresses.length;
 
   const handleSubjectChange = (event) => {
     setSubject(event.target.value);
@@ -94,19 +96,19 @@ const Mail = () => {
       eventSource.onmessage = (event) => {
         try {
           const email = JSON.parse(event.data);
-
+      
           const simplifiedEmail = {
             sender: email.from?.text,
             subject: email.subject,
             date: email.date,
           };
-
+      
           console.log(simplifiedEmail);
-
+      
           const emailRegex = /<([^>]+)>/;
           const match = simplifiedEmail.sender?.match(emailRegex);
           const senderEmail = match ? match[1].toLowerCase() : '';
-
+      
           if (sendTime && new Date(email.date) > sendTime) {
             setMails((prevMails) => {
               if (
@@ -121,9 +123,17 @@ const Mail = () => {
               }
               return prevMails;
             });
-
+      
             if (emailAddresses.includes(senderEmail)) {
-              setMatchedEmails((prev) => new Set(prev.add(senderEmail)));
+              setMatchedEmails((prev) => {
+                const newMatchedEmails = new Set(prev);
+                newMatchedEmails.add(senderEmail);
+      
+                // Update receivedCount based on the size of the matchedEmails set
+                setReceivedCount(newMatchedEmails.size);
+      
+                return newMatchedEmails;
+              });
             }
           }
         } catch (error) {
@@ -153,6 +163,7 @@ const Mail = () => {
 
   return (
     <div className="mail-container">
+      <h1>{receivedCount}/{sentCount}</h1>
       <div className="form-group">
         <label>
           Subject:
@@ -189,13 +200,13 @@ const Mail = () => {
                 className={`email-item ${matchedEmails.has(email.toLowerCase()) ? 'matched' : ''}`}
               >
                 <span className="email-text">{email}</span>
-                {isRemoveBtnVisible && 
+                {isRemoveBtnVisible &&
                   <button
                   className="remove-btn"
                   onClick={() => removeEmail(email)}
                   disabled={sending}
                 >
-                  &times;
+                  <span>&times;</span>
                 </button>
                 }
               </div>
