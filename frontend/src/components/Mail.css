@@ -126,6 +126,15 @@
 
   
   .delete-all {
-    background-color: red;
+    background-color: palevioletred;
     color: white;
+    padding: 1rem;
+    border: 1px solid palevioletred;
+    border-radius: 32px;
+    cursor: pointer;
+  }
+
+  .delete-all:hover {
+    color: white;
+    box-shadow: 0 4px 8px rgba(21, 87, 36, 0.6);
   }

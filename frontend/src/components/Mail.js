@@ -193,7 +193,7 @@ const Mail = () => {
           />
         </label>
       </div>
-      <button onClick={handleRemove}>Remove All</button>
+      <button className="delete-all" onClick={handleRemove}>Remove All</button>
       <div className="form-group">
         <div className="email-list">
           {emailAddresses.length > 0 ? (
