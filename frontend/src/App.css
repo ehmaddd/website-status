@@ -26,7 +26,7 @@ h2 {
 .check-button {
   padding-top: 30px;
   padding-bottom: 40px;
-  background-color: #1e90ff;
+  background-color: blue;
   color: white;
   border: 2px solid gold;
   border-radius: 5px;
@@ -85,10 +85,6 @@ h2 {
 
 .status-card h4 a {
   text-decoration: none;
-}
-
-.status-card a:hover {
-  color: black;
 }
 
 .status-card p {
@@ -197,6 +193,6 @@ h2 {
 }
 
 .checked-at:hover {
-  background-color:steelblue;
-  color: white;
+  background-color: wheat;
+  color: darkgoldenrod;
 }
