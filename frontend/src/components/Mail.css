@@ -123,3 +123,9 @@
     background-color: #d4edda; /* Light green background */
     color: #155724; /* Darker green text color */
   }
+
+  
+  .delete-all {
+    background-color: red;
+    color: white;
+  }
