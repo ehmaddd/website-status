@@ -31,6 +31,8 @@
       host: 'imap.mail.yahoo.com',
       port: 993,
       tls: true,
+      connTimeout: 30000,
+      authTimeout: 30000,
     });
   
     const today = new Date();
