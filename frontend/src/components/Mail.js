@@ -193,7 +193,9 @@ const Mail = () => {
           />
         </label>
       </div>
-      <button className="delete-all" onClick={handleRemove}>Remove All</button>
+      {emailAddresses.length>0 &&
+        <button className="delete-all" onClick={handleRemove}>Remove All</button>
+      }
       <div className="form-group">
         <div className="email-list">
           {emailAddresses.length > 0 ? (
