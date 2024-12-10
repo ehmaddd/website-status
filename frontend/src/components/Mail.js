@@ -19,6 +19,9 @@ const Mail = () => {
   const [receivedCount, setReceivedCount] = useState(0);
   const sentCount = emailAddresses.length;
 
+  const handleRemove = () => {
+    setEmailAddresses([]);
+  }
   const handleSubjectChange = (event) => {
     setSubject(event.target.value);
   };
@@ -190,7 +193,7 @@ const Mail = () => {
           />
         </label>
       </div>
-
+      <button onClick={handleRemove}>Remove All</button>
       <div className="form-group">
         <div className="email-list">
           {emailAddresses.length > 0 ? (
