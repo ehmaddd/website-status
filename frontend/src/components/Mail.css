@@ -119,3 +119,22 @@
     }
   }
   
+  .matched {
+    background-color: #d4edda; /* Light green background */
+    color: #155724; /* Darker green text color */
+  }
+
+  
+  .delete-all {
+    background-color: palevioletred;
+    color: white;
+    padding: 1rem;
+    border: 1px solid palevioletred;
+    border-radius: 32px;
+    cursor: pointer;
+  }
+
+  .delete-all:hover {
+    color: white;
+    box-shadow: 0 4px 8px rgba(21, 87, 36, 0.6);
+  }

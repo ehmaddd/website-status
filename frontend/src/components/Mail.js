@@ -12,11 +12,16 @@ const Mail = () => {
   const [emailInput, setEmailInput] = useState('');
   const [mails, setMails] = useState([]);
   const [retryCount, setRetryCount] = useState(0);
-  const [sendTime, setSendTime] = useState(null); // Store the send time
-  const [fetchingEmails, setFetchingEmails] = useState(false); // Control when to start fetching emails
-  const [matchedEmails, setMatchedEmails] = useState(new Set()); // Track matched emails
+  const [sendTime, setSendTime] = useState(null);
+  const [fetchingEmails, setFetchingEmails] = useState(false);
+  const [matchedEmails, setMatchedEmails] = useState(new Set());
   const [isRemoveBtnVisible, setIsRemoveBtnVisible] = useState(true);
+  const [receivedCount, setReceivedCount] = useState(0);
+  const sentCount = emailAddresses.length;
 
+  const handleRemove = () => {
+    setEmailAddresses([]);
+  }
   const handleSubjectChange = (event) => {
     setSubject(event.target.value);
   };
@@ -59,7 +64,7 @@ const Mail = () => {
     setIsRemoveBtnVisible(false);
     setSending(true);
     setMessage('');
-    setSendTime(new Date()); // Record the current time when emails are sent
+    setSendTime(new Date());
 
     try {
       const response = await axios.post('http://localhost:5000/send-emails', {
@@ -69,8 +74,7 @@ const Mail = () => {
       });
       setMessage(response.data);
 
-      // After emails are sent, start fetching emails
-      setFetchingEmails(true); // Now start fetching emails
+      setFetchingEmails(true);
     } catch (error) {
       setMessage('Error sending emails: ' + error.message);
     } finally {
@@ -79,7 +83,7 @@ const Mail = () => {
   };
 
   useEffect(() => {
-    if (!fetchingEmails) return; // Don't start fetching emails unless the flag is true
+    if (!fetchingEmails) return;
 
     let retryTimeout;
 
@@ -89,28 +93,25 @@ const Mail = () => {
 
       eventSource.onopen = () => {
         console.log('Connected to EventSource');
-        setRetryCount(0); // Reset retry count on successful connection
+        setRetryCount(0);
       };
 
       eventSource.onmessage = (event) => {
         try {
           const email = JSON.parse(event.data);
-
-          // Extract only the required fields
+      
           const simplifiedEmail = {
-            sender: email.from?.text, // e.g., "Ahmed Saeed <ehmaddd@gmail.com>"
+            sender: email.from?.text,
             subject: email.subject,
-            date: email.date, // Ensure this field exists in your data
+            date: email.date,
           };
-
+      
           console.log(simplifiedEmail);
-
-          // Extract the email address from the sender string using regex
+      
           const emailRegex = /<([^>]+)>/;
           const match = simplifiedEmail.sender?.match(emailRegex);
-          const senderEmail = match ? match[1].toLowerCase() : ''; // Extracted and lowercased email
-
-          // Only update the mails state if the email was received after the send time
+          const senderEmail = match ? match[1].toLowerCase() : '';
+      
           if (sendTime && new Date(email.date) > sendTime) {
             setMails((prevMails) => {
               if (
@@ -125,10 +126,17 @@ const Mail = () => {
               }
               return prevMails;
             });
-
-            // Check if the extracted sender's email matches any of the email addresses in the list
+      
             if (emailAddresses.includes(senderEmail)) {
-              setMatchedEmails((prev) => new Set(prev.add(senderEmail)));
+              setMatchedEmails((prev) => {
+                const newMatchedEmails = new Set(prev);
+                newMatchedEmails.add(senderEmail);
+      
+                // Update receivedCount based on the size of the matchedEmails set
+                setReceivedCount(newMatchedEmails.size);
+      
+                return newMatchedEmails;
+              });
             }
           }
         } catch (error) {
@@ -141,7 +149,6 @@ const Mail = () => {
         eventSource.close();
         setRetryCount((prev) => prev + 1);
 
-        // Retry connection after 5 seconds
         retryTimeout = setTimeout(connectToEventSource, 5000);
       };
 
@@ -159,6 +166,7 @@ const Mail = () => {
 
   return (
     <div className="mail-container">
+      <h1>{receivedCount}/{sentCount}</h1>
       <div className="form-group">
         <label>
           Subject:
@@ -185,7 +193,9 @@ const Mail = () => {
           />
         </label>
       </div>
-
+      {emailAddresses.length>0 &&
+        <button className="delete-all" onClick={handleRemove}>Remove All</button>
+      }
       <div className="form-group">
         <div className="email-list">
           {emailAddresses.length > 0 ? (
@@ -195,13 +205,13 @@ const Mail = () => {
                 className={`email-item ${matchedEmails.has(email.toLowerCase()) ? 'matched' : ''}`}
               >
                 <span className="email-text">{email}</span>
-                {isRemoveBtnVisible && 
+                {isRemoveBtnVisible &&
                   <button
                   className="remove-btn"
                   onClick={() => removeEmail(email)}
                   disabled={sending}
                 >
-                  &times;
+                  <span>&times;</span>
                 </button>
                 }
               </div>
