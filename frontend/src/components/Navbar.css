@@ -1,6 +1,9 @@
 nav {
   display: flex;
+  position: sticky;
+  top: 0;
   width: 100%;
+  z-index: 100;
 }
 
 nav ul {
@@ -16,15 +19,18 @@ nav li {
   background-color: darkgoldenrod;
   flex: 1;
   text-align: center;
-  border: 1px solid #ddd;
+  border: 1px solid transparent;
   padding: 10px 0;
   position: relative;
-  background: linear-gradient(90deg, red, yellow, green);
-  background-size: 400%;
+  background: linear-gradient(90deg, teal 50%, #1e90ff 50%);
+  background-size: 200%;
   background-position: 0%;
-  transition: background-position 1s ease-in-out;
+  transition: background-position 0.5s ease-in-out;
 }
 
+nav li:active {
+  background-position: 0%;
+}
 
 nav li:hover {
   background-position: 100%;
@@ -32,6 +38,8 @@ nav li:hover {
 
 nav li a {
   text-decoration: none;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
   color: yellow;
   display: block;
 }
