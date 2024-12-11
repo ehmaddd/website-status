@@ -88,7 +88,8 @@ const websites = [
     "https://vodzytechnologies.com",
     "https://maximatechnologies.co.uk",
     "https://studentreviews.website/",
-    "https://editingminds.com"
+    "https://geeksglider.com",
+    "https://geeksider.co.uk"
 ];
 
 module.exports = websites; 
