@@ -23,6 +23,9 @@ const Mail = () => {
     setEmailAddresses([]);
     setReceivedCount([]);
   }
+  const handleReset = () => {
+    setEmailAddresses(emails);
+  }
   const handleSubjectChange = (event) => {
     setSubject(event.target.value);
   };
