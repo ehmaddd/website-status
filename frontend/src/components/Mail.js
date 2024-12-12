@@ -6,7 +6,7 @@ import axios from 'axios';
 const Mail = () => {
   const [sending, setSending] = useState(false);
   const [message, setMessage] = useState('');
-  const [emailAddresses, setEmailAddresses] = useState(emails);
+  const [emailAddresses, setEmailAddresses] = useState(emails || []);
   const [subject, setSubject] = useState('');
   const [text, setText] = useState('');
   const [emailInput, setEmailInput] = useState('');
@@ -21,6 +21,10 @@ const Mail = () => {
 
   const handleRemove = () => {
     setEmailAddresses([]);
+    setReceivedCount([]);
+  }
+  const handleReset = () => {
+    setEmailAddresses(emails);
   }
   const handleSubjectChange = (event) => {
     setSubject(event.target.value);
@@ -166,7 +170,7 @@ const Mail = () => {
 
   return (
     <div className="mail-container">
-      <h1>{receivedCount}/{sentCount}</h1>
+      <h1>{(receivedCount.length>0) ? receivedCount : 0}/{sentCount}</h1>
       <div className="form-group">
         <label>
           Subject:
@@ -196,6 +200,7 @@ const Mail = () => {
       {emailAddresses.length>0 &&
         <button className="delete-all" onClick={handleRemove}>Remove All</button>
       }
+      <button className="reset-btn" onClick={handleReset}>Reset</button>
       <div className="form-group">
         <div className="email-list">
           {emailAddresses.length > 0 ? (
