@@ -197,7 +197,7 @@ const Mail = () => {
       {emailAddresses.length>0 &&
         <button className="delete-all" onClick={handleRemove}>Remove All</button>
       }
-
+      <button className="reset-btn" onClick={handleReset}>Reset</button>
       <div className="form-group">
         <div className="email-list">
           {emailAddresses.length > 0 ? (
