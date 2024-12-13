@@ -170,7 +170,7 @@ const Mail = () => {
 
   return (
     <div className="mail-container">
-      <h1>{(receivedCount.length>0) ? receivedCount : 0}/{sentCount}</h1>
+      <h1>{(receivedCount>0) ? receivedCount : 0}/{sentCount}</h1>
       <div className="form-group">
         <label>
           Subject:
