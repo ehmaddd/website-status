@@ -148,3 +148,8 @@ button:hover {
   cursor: pointer;
   width: 7rem;
 }
+
+.reset-btn:hover {
+  color: white;
+  box-shadow: 0 4px 8px rgba(21, 87, 36, 0.6);
+}
