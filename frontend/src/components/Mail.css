@@ -135,21 +135,19 @@ button:hover {
 }
 
 .delete-all:hover {
-  color: white;
   box-shadow: 0 4px 8px rgba(21, 87, 36, 0.6);
 }
 
 .reset-btn {
-  background-color: skyblue;
-  color: blue;
+  background-color: white;
+  color:palevioletred;
   padding: 1rem;
-  border: 1px solid skyblue;
+  border: 1px solid palevioletred;
   border-radius: 32px;
   cursor: pointer;
   width: 7rem;
 }
 
 .reset-btn:hover {
-  color: white;
   box-shadow: 0 4px 8px rgba(21, 87, 36, 0.6);
 }
