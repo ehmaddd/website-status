@@ -171,36 +171,7 @@ const Mail = () => {
   return (
     <div className="mail-container">
       <h1>{(receivedCount>0) ? receivedCount : 0}/{sentCount}</h1>
-      <div className="form-group">
-        <label>
-          Subject:
-          <input
-            type="text"
-            value={subject}
-            onChange={handleSubjectChange}
-            placeholder="Enter subject"
-            disabled={sending}
-            className="input-field"
-          />
-        </label>
-      </div>
 
-      <div className="form-group">
-        <label>
-          Message Text:
-          <textarea
-            value={text}
-            onChange={handleTextChange}
-            placeholder="Enter message text"
-            disabled={sending}
-            className="input-field"
-          />
-        </label>
-      </div>
-      {emailAddresses.length>0 &&
-        <button className="delete-all" onClick={handleRemove}>Remove All</button>
-      }
-      <button className="reset-btn" onClick={handleReset}>Reset</button>
       <div className="form-group">
         <div className="email-list">
           {emailAddresses.length > 0 ? (
@@ -227,7 +198,7 @@ const Mail = () => {
         </div>
       </div>
 
-      <div className="form-group">
+      <div className="form-group add-email">
         <input
           type="email"
           value={emailInput}
@@ -243,8 +214,39 @@ const Mail = () => {
         >
           Add Email
         </button>
+        {emailAddresses.length>0 &&
+          <button className="delete-all" onClick={handleRemove}>Remove All</button>
+        }
+        <button className="reset-btn" onClick={handleReset}>Reset</button>
       </div>
 
+      <div className="form-group">
+        <label>
+          Subject:
+          <input
+            type="text"
+            value={subject}
+            onChange={handleSubjectChange}
+            placeholder="Enter subject"
+            disabled={sending}
+            className="input-field"
+          />
+        </label>
+      </div>
+
+      <div className="form-group">
+        <label>
+          Message Text:
+          <textarea
+            value={text}
+            onChange={handleTextChange}
+            placeholder="Enter message text"
+            disabled={sending}
+            className="input-field"
+          />
+        </label>
+      </div>
+    
       <button
         className="send-btn"
         onClick={sendEmails}

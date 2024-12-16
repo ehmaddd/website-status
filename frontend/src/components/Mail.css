@@ -81,7 +81,17 @@ textarea.input-field {
   background-color: #ddd;
 }
 
-.add-btn, .send-btn {
+.add-btn {
+  background-color: #4CAF50;
+  color: #ffff;
+  padding: 1rem;
+  border: 1px solid #4CAF50;
+  border-radius: 32px;
+  cursor: pointer;
+  width: 7rem;
+}
+
+.send-btn {
   padding: 10px 15px;
   background-color: #4CAF50;
   color: white;
@@ -92,8 +102,13 @@ textarea.input-field {
   margin-top: 10px;
 }
 
-.add-btn:disabled, .send-btn:disabled {
+.send-btn:disabled {
   background-color: #ddd;
+}
+
+.add-btn:disabled {
+  background-color: #ddd;
+  color: grey;
 }
 
 .message {
@@ -150,4 +165,20 @@ button:hover {
 
 .reset-btn:hover {
   box-shadow: 0 4px 8px rgba(21, 87, 36, 0.6);
+}
+
+.add-email {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.add-email input {
+  width: 30%;
+  height: 1.5rem;
+  margin-top: 0.7rem;
+}
+
+.add-email button {
+  padding: 0.8rem;
 }
