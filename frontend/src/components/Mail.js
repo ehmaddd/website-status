@@ -172,10 +172,6 @@ const Mail = () => {
     <div className="mail-container">
       <h1>{(receivedCount>0) ? receivedCount : 0}/{sentCount}</h1>
 
-      {emailAddresses.length>0 &&
-        <button className="delete-all" onClick={handleRemove}>Remove All</button>
-      }
-      <button className="reset-btn" onClick={handleReset}>Reset</button>
       <div className="form-group">
         <div className="email-list">
           {emailAddresses.length > 0 ? (
@@ -218,6 +214,10 @@ const Mail = () => {
         >
           Add Email
         </button>
+        {emailAddresses.length>0 &&
+          <button className="delete-all" onClick={handleRemove}>Remove All</button>
+        }
+        <button className="reset-btn" onClick={handleReset}>Reset</button>
       </div>
 
       <div className="form-group">
