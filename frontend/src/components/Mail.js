@@ -202,7 +202,7 @@ const Mail = () => {
         </div>
       </div>
 
-      <div className="form-group">
+      <div className="form-group add-email">
         <input
           type="email"
           value={emailInput}

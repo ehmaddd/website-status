@@ -151,3 +151,19 @@ button:hover {
 .reset-btn:hover {
   box-shadow: 0 4px 8px rgba(21, 87, 36, 0.6);
 }
+
+.add-email {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.add-email input {
+  width: 50%;
+  height: 1.5rem;
+  margin-top: 0.7rem;
+}
+
+.add-email button {
+  padding: 0.8rem;
+}
