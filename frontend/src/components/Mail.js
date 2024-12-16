@@ -220,6 +220,33 @@ const Mail = () => {
         </button>
       </div>
 
+      <div className="form-group">
+        <label>
+          Subject:
+          <input
+            type="text"
+            value={subject}
+            onChange={handleSubjectChange}
+            placeholder="Enter subject"
+            disabled={sending}
+            className="input-field"
+          />
+        </label>
+      </div>
+
+      <div className="form-group">
+        <label>
+          Message Text:
+          <textarea
+            value={text}
+            onChange={handleTextChange}
+            placeholder="Enter message text"
+            disabled={sending}
+            className="input-field"
+          />
+        </label>
+      </div>
+    
       <button
         className="send-btn"
         onClick={sendEmails}
