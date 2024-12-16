@@ -171,32 +171,7 @@ const Mail = () => {
   return (
     <div className="mail-container">
       <h1>{(receivedCount>0) ? receivedCount : 0}/{sentCount}</h1>
-      <div className="form-group">
-        <label>
-          Subject:
-          <input
-            type="text"
-            value={subject}
-            onChange={handleSubjectChange}
-            placeholder="Enter subject"
-            disabled={sending}
-            className="input-field"
-          />
-        </label>
-      </div>
 
-      <div className="form-group">
-        <label>
-          Message Text:
-          <textarea
-            value={text}
-            onChange={handleTextChange}
-            placeholder="Enter message text"
-            disabled={sending}
-            className="input-field"
-          />
-        </label>
-      </div>
       {emailAddresses.length>0 &&
         <button className="delete-all" onClick={handleRemove}>Remove All</button>
       }
