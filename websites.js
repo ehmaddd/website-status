@@ -31,7 +31,7 @@ const websites = [
     "https://essaysurfer.com",
     "https://paperslead.com",
     "https://eduhelpersnow.com",
-    "https://www.educatorsinn.com/",
+    "https://educatorsinn.com/",
     "https://studenthelpers.co.uk",
     "https://intellectualswing.com/",
     "https://grabpapers.com",
